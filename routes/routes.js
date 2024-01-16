@@ -5,7 +5,7 @@ const libros = require('../data');
 const Joi = require('joi');
 
 const libroSchema = Joi.object({
-//  id: Joi.number().positive(),
+  id: Joi.number().positive(),
   titulo: Joi.string().required().label('Título'),
   autor: Joi.string().required().label('Autor'),
 });
@@ -21,8 +21,8 @@ router.get('/', (req, res, next) => {
 // Obtener un libro por ID
 router.get('/:id', (req, res, next) => {
   try {
-    const id = req.params.id;
-    const libro = libros.find((l) => l?.id === id);
+    const id = parseInt(req.params.id);
+    const libro = libros.find((l) => l.id === id);
     if (!libro) {
       const error = new Error('Libro no encontrado');
       error.status = 404;
@@ -58,7 +58,7 @@ router.post('/', (req, res, next) => {
 // Actualizar un libro existente
 router.put('/:id', (req, res, next) => {
   try {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const { error, value } = libroSchema.validate(req.body);
     if (error) {
       const validationError = new Error('Error de validación');
